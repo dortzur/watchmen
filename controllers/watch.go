@@ -24,6 +24,10 @@ func (h WatchController) CheckOut(c *gin.Context) {
 	company := c.Query("company")
 	user := c.Param("username")
 	pass := c.Param("password")
-	res := gin.H{"result": watcher.CheckOut(user, pass, watcher.WithCompany(company))}
-	c.JSON(http.StatusOK, res)
+	_, err := watcher.CheckOut(user, pass, watcher.WithCompany(company))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"success": true, "operation": "checkout", "user": user})
 }

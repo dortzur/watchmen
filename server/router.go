@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 		{
 			watcher := new(controllers.WatchController)
 			watcherGroup.GET("checkin/:username/:password", watcher.CheckIn)
-			watcherGroup.GET("checkout/:username/:password", watcher.CheckIn)
+			watcherGroup.GET("checkout/:username/:password", watcher.CheckOut)
 		}
 	}
 

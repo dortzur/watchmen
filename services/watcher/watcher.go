@@ -29,11 +29,7 @@ func WithCompany(company string) Option {
 	}
 }
 
-func CheckIn(user string, password string, watcherOptions ...Option) (map[string]interface{}, error) {
-	options := defaultOptions
-	for _, opt := range watcherOptions {
-		opt(&options)
-	}
+func getClient() *resty.Client {
 	client := resty.New()
 	client.SetHeaders(
 		map[string]string{
@@ -46,32 +42,50 @@ func CheckIn(user string, password string, watcherOptions ...Option) (map[string
 		})
 
 	client.SetRedirectPolicy(resty.FlexibleRedirectPolicy(15))
+	return client
+}
+
+func doLogin(user string, password string, company string) (*resty.Client, string, error) {
+	client := getClient()
 	response, err := client.R().SetFormData(map[string]string{
-		"comp": options.Company,
+		"comp": company,
 		"name": user,
 		"pw":   password,
 		"B1.x": strconv.Itoa(random.Intn(30-1) + 1),
 		"B1.y": strconv.Itoa(random.Intn(30-1) + 1),
 	}).Post("http://checkin.timewatch.co.il/punch/punch2.php")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	cookies := response.Cookies()
 
 	if len(cookies) == 0 {
-		return nil, errors.New("authentication failed. Please check credentials")
+		return nil, "", errors.New("authentication failed. Please check credentials")
 	}
 	ixeeResult := ixeeRegex.FindStringSubmatch(response.String())
 	if len(ixeeResult) < 2 {
-		return nil, errors.New("couldn't parse timewatch response")
+		return nil, "", errors.New("couldn't parse timewatch response")
 	}
+
 	ixee := ixeeResult[1]
 	client.Cookies = cookies
+	return client, ixee, nil
+}
+func CheckIn(user string, password string, watcherOptions ...Option) (map[string]interface{}, error) {
+	options := defaultOptions
+	for _, opt := range watcherOptions {
+		opt(&options)
+	}
+	client, ixee, err := doLogin(user, password, options.Company)
+	if err != nil {
+		return nil, err
+	}
+
 	client.SetDebug(true)
 
 	layout := "2006-01-02 15:04:05"
 	now := time.Now().Format(layout)
-	response, err = client.R().SetFormData(map[string]string{
+	_, err = client.R().SetFormData(map[string]string{
 		"comp":          options.Company,
 		"name":          user,
 		"ts":            now,
@@ -100,10 +114,39 @@ func CheckIn(user string, password string, watcherOptions ...Option) (map[string
 	return gin.H{"user": user, "password": password, "options": options}, nil
 }
 
-func CheckOut(user string, password string, watcherOptions ...Option) Options {
+func CheckOut(user string, password string, watcherOptions ...Option) (map[string]interface{}, error) {
 	options := defaultOptions
 	for _, opt := range watcherOptions {
 		opt(&options)
 	}
-	return options
+
+	client, ixee, err := doLogin(user, password, options.Company)
+	if err != nil {
+		return nil, err
+	}
+
+	client.SetDebug(true)
+
+	layout := "2006-01-02 15:04:05"
+	now := time.Now().Format(layout)
+	_, err = client.R().SetFormData(map[string]string{
+		"comp":          options.Company,
+		"name":          user,
+		"ts":            now,
+		"ix":            ixee,
+		"B1":            "יציאה",
+		"allowremarks":  "1",
+		"msgfound":      "0",
+		"thetask":       "0",
+		"teamleader":    "0",
+		"speccomp":      "",
+		"remark":        "",
+		"tasks":         "",
+		"taskdescr":     "",
+		"prevtask":      "0",
+		"prevtaskdescr": "",
+		"withtasks":     "0",
+		"tflag":         "1",
+	}).Post("http://checkin.timewatch.co.il/punch/punch3.php")
+	return gin.H{"user": user, "password": password, "options": options}, nil
 }
