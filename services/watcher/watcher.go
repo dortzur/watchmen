@@ -1,6 +1,6 @@
 package watcher
 
-import "watchmen/services"
+import "github.com/gin-gonic/gin"
 
 type Options struct {
 	Company string `json:"company"`
@@ -12,17 +12,18 @@ type Option func(option *Options)
 
 func WithCompany(company string) Option {
 	return func(options *Options) {
-		options.Company = company
+		if company != "" {
+			options.Company = company
+		}
 	}
 }
 
-func CheckIn(user string, password string, watcherOptions ...Option) Options {
+func CheckIn(user string, password string, watcherOptions ...Option) map[string]interface{} {
 	options := defaultOptions
 	for _, opt := range watcherOptions {
 		opt(&options)
 	}
-	services.Logger.Info("OPTIONS", options)
-	return options
+	return gin.H{"user": user, "password": password, "options": options}
 }
 
 func CheckOut(user string, password string, watcherOptions ...Option) Options {
@@ -30,6 +31,5 @@ func CheckOut(user string, password string, watcherOptions ...Option) Options {
 	for _, opt := range watcherOptions {
 		opt(&options)
 	}
-	services.Logger.Info("OPTIONS", options)
 	return options
 }

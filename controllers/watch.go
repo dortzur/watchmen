@@ -9,10 +9,17 @@ import (
 type WatchController struct{}
 
 func (h WatchController) CheckIn(c *gin.Context) {
-	defaultOptions := watcher.CheckIn("baba", "ganush")
-	companyOptions := watcher.CheckIn("yo", "hey", watcher.WithCompany("eeee"))
-	res := gin.H{"default": defaultOptions,
-		"company": companyOptions,
-	}
+	company := c.Query("company")
+	user := c.Param("username")
+	pass := c.Param("password")
+	res := gin.H{"result": watcher.CheckIn(user, pass, watcher.WithCompany(company))}
+	c.JSON(http.StatusOK, res)
+}
+
+func (h WatchController) CheckOut(c *gin.Context) {
+	company := c.Query("company")
+	user := c.Param("username")
+	pass := c.Param("password")
+	res := gin.H{"result": watcher.CheckOut(user, pass, watcher.WithCompany(company))}
 	c.JSON(http.StatusOK, res)
 }
