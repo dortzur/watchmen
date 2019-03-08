@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"watchmen/config"
 	"watchmen/services"
 )
 
@@ -21,6 +22,11 @@ func bookChanger(book Book) {
 
 }
 func main() {
+	config.Init(services.GetEnv())
+	//db.Init()
+	//server.Init()
+}
+func babmain() {
 	baba := Book{baba: "aa", ganush: 12}
 	myMap := map[Book]string{baba: "yo"}
 
