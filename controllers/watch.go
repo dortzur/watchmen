@@ -12,7 +12,11 @@ func (h WatchController) CheckIn(c *gin.Context) {
 	company := c.Query("company")
 	user := c.Param("username")
 	pass := c.Param("password")
-	res := gin.H{"result": watcher.CheckIn(user, pass, watcher.WithCompany(company))}
+	res, err := watcher.CheckIn(user, pass, watcher.WithCompany(company))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, res)
 }
 
