@@ -7,13 +7,44 @@ info:
   title: '{{.Title}}'
   version: "1.0"
 paths:
-  /health:
+  /v1/watcher/checkin/{employee_id}/{password}:
     get:
-      consumes:
-      - application/json
-      description: get health json
-      operationId: get-health
+      description: get request to perform checkin
+      operationId: checkin
+      parameters:
+      - description: Employee ID
+        in: path
+        name: employee_id
+        required: true
+        type: string
+      - description: Employee Password
+        in: path
+        name: password
+        required: true
+        type: string
       produces:
       - application/json
-      summary: Return Health Status
+      summary: Perform Checkin to timewatch.co.il
+      tags:
+      - Watcher
+  /v1/watcher/checkout/{employee_id}/{password}:
+    get:
+      description: get request to perform checkout
+      operationId: checkout
+      parameters:
+      - description: Employee ID
+        in: path
+        name: employee_id
+        required: true
+        type: string
+      - description: Employee Password
+        in: path
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Perform Checkout to timewatch.co.il
+      tags:
+      - Watcher
 swagger: "2.0"
