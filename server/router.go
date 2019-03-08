@@ -2,6 +2,8 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"watchmen/controllers"
 )
 
@@ -12,7 +14,7 @@ func NewRouter() *gin.Engine {
 
 	health := new(controllers.HealthController)
 	router.GET("/health", health.Status)
-
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	v1 := router.Group("v1")
 	{
 		watcherGroup := v1.Group("watcher")
@@ -22,6 +24,5 @@ func NewRouter() *gin.Engine {
 			watcherGroup.GET("checkout/:username/:password", watcher.CheckOut)
 		}
 	}
-
 	return router
 }

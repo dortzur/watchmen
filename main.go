@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"watchmen/config"
+	"watchmen/docs"
 	"watchmen/server"
 	"watchmen/services"
 )
@@ -22,10 +23,14 @@ func bookChanger(book Book) {
 	book.baba = "Yo"
 
 }
+
+// @version 1.0
 func main() {
 	config.Init(services.GetEnv())
-	//db.Init()
+	docs.SwaggerInfo.Title = "Watchmen timewatch.co.il API"
+
 	server.Init()
+
 }
 func babmain() {
 	baba := Book{baba: "aa", ganush: 12}

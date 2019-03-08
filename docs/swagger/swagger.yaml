@@ -1,0 +1,19 @@
+basePath: '{{.BasePath}}'
+host: '{{.Host}}'
+info:
+  contact: {}
+  description: '{{.Description}}'
+  license: {}
+  title: '{{.Title}}'
+  version: "1.0"
+paths:
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: get health json
+      operationId: get-health
+      produces:
+      - application/json
+      summary: Return Health Status
+swagger: "2.0"
