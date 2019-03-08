@@ -5,9 +5,7 @@ import (
 )
 
 func Init() {
-
 	//conf := config.GetConfig()
-
 	r := NewRouter()
 	err := r.Run()
 	if err != nil {

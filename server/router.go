@@ -11,17 +11,16 @@ func NewRouter() *gin.Engine {
 	router.Use(gin.Recovery())
 
 	health := new(controllers.HealthController)
-
 	router.GET("/health", health.Status)
-	//router.Use(middlewares.AuthMiddleware())
 
-	//v1 := router.Group("v1")
-	//{
-	//userGroup := v1.Group("user")
-	//{
-	//user := new(controllers.UserController)
-	//userGroup.GET("/:id", user.Retrieve)
-	//}
-	//}
+	v1 := router.Group("v1")
+	{
+		watcherGroup := v1.Group("watcher")
+		{
+			watcher := new(controllers.WatchController)
+			watcherGroup.GET("/", watcher.CheckIn)
+		}
+	}
+
 	return router
 }
