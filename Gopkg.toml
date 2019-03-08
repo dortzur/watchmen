@@ -24,7 +24,9 @@
 #   go-tests = true
 #   unused-packages = true
 [metadata.heroku]
-  root-package = "main"
+  root-package = "github.com/dortzur/watchmen"
+  go-version = "1.12.0"
+
 
 
 [[constraint]]
