@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"path/filepath"
 	"watchmen/services"
 )
 
@@ -20,13 +19,6 @@ func Init(env string) {
 	err = config.ReadInConfig()
 	if err != nil {
 		services.Logger.Fatal("error on parsing configuration file")
-	}
-}
-
-func relativePath(basedir string, path *string) {
-	p := *path
-	if len(p) > 0 && p[0] != '/' {
-		*path = filepath.Join(basedir, p)
 	}
 }
 
