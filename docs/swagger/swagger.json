@@ -19,7 +19,7 @@
                 "tags": [
                     "Watcher"
                 ],
-                "summary": "Perform Checkin to timewatch.co.il",
+                "summary": "Perform checkin via timewatch.co.il",
                 "operationId": "checkin",
                 "parameters": [
                     {
@@ -55,7 +55,7 @@
                 "tags": [
                     "Watcher"
                 ],
-                "summary": "Perform Checkout to timewatch.co.il",
+                "summary": "Perform checkout via timewatch.co.il",
                 "operationId": "checkout",
                 "parameters": [
                     {

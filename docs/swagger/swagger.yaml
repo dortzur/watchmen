@@ -29,7 +29,7 @@ paths:
         type: string
       produces:
       - application/json
-      summary: Perform Checkin to timewatch.co.il
+      summary: Perform checkin via timewatch.co.il
       tags:
       - Watcher
   /v1/watcher/checkout/{company_id}/{employee_id}/{password}:
@@ -54,7 +54,7 @@ paths:
         type: string
       produces:
       - application/json
-      summary: Perform Checkout to timewatch.co.il
+      summary: Perform checkout via timewatch.co.il
       tags:
       - Watcher
 swagger: "2.0"

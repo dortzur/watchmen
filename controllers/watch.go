@@ -9,7 +9,7 @@ import (
 type WatchController struct{}
 
 // WatchController godoc
-// @Summary Perform Checkin to timewatch.co.il
+// @Summary Perform checkin via timewatch.co.il
 // @Description get request to perform checkin
 // @ID checkin
 // @Produce json
@@ -32,7 +32,7 @@ func (h WatchController) CheckIn(c *gin.Context) {
 }
 
 // WatchController godoc
-// @Summary Perform Checkout to timewatch.co.il
+// @Summary Perform checkout via timewatch.co.il
 // @GroupName baba
 // @Description get request to perform checkout
 // @ID checkout
