@@ -7,11 +7,16 @@ info:
   title: '{{.Title}}'
   version: "1.0"
 paths:
-  /v1/watcher/checkin/{employee_id}/{password}:
+  /v1/watcher/checkin/{company_id}/{employee_id}/{password}:
     get:
       description: get request to perform checkin
       operationId: checkin
       parameters:
+      - description: Company ID
+        in: path
+        name: company_id
+        required: true
+        type: string
       - description: Employee ID
         in: path
         name: employee_id
@@ -27,11 +32,16 @@ paths:
       summary: Perform Checkin to timewatch.co.il
       tags:
       - Watcher
-  /v1/watcher/checkout/{employee_id}/{password}:
+  /v1/watcher/checkout/{company_id}/{employee_id}/{password}:
     get:
       description: get request to perform checkout
       operationId: checkout
       parameters:
+      - description: Company ID
+        in: path
+        name: company_id
+        required: true
+        type: string
       - description: Employee ID
         in: path
         name: employee_id

@@ -47,6 +47,7 @@ func getClient() *resty.Client {
 
 func doLogin(user string, password string, company string) (*resty.Client, string, error) {
 	client := getClient()
+
 	response, err := client.R().SetFormData(map[string]string{
 		"comp": company,
 		"name": user,
@@ -71,6 +72,7 @@ func doLogin(user string, password string, company string) (*resty.Client, strin
 	client.Cookies = cookies
 	return client, ixee, nil
 }
+
 func CheckIn(user string, password string, watcherOptions ...Option) (map[string]interface{}, error) {
 	options := defaultOptions
 	for _, opt := range watcherOptions {
@@ -80,8 +82,6 @@ func CheckIn(user string, password string, watcherOptions ...Option) (map[string
 	if err != nil {
 		return nil, err
 	}
-
-	client.SetDebug(true)
 
 	layout := "2006-01-02 15:04:05"
 	now := time.Now().Format(layout)
@@ -105,12 +105,6 @@ func CheckIn(user string, password string, watcherOptions ...Option) (map[string
 		"tflag":         "",
 	}).Post("http://checkin.timewatch.co.il/punch/punch3.php")
 
-	//checkout params
-	//B1: יציאה
-	//tflag: 1
-
-	//services.Logger.Info(response.String())
-
 	return gin.H{"user": user, "password": password, "options": options}, nil
 }
 
@@ -124,8 +118,6 @@ func CheckOut(user string, password string, watcherOptions ...Option) (map[strin
 	if err != nil {
 		return nil, err
 	}
-
-	client.SetDebug(true)
 
 	layout := "2006-01-02 15:04:05"
 	now := time.Now().Format(layout)
@@ -148,5 +140,6 @@ func CheckOut(user string, password string, watcherOptions ...Option) (map[strin
 		"withtasks":     "0",
 		"tflag":         "1",
 	}).Post("http://checkin.timewatch.co.il/punch/punch3.php")
+
 	return gin.H{"user": user, "password": password, "options": options}, nil
 }

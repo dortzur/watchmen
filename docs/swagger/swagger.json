@@ -10,7 +10,7 @@
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/watcher/checkin/{employee_id}/{password}": {
+        "/v1/watcher/checkin/{company_id}/{employee_id}/{password}": {
             "get": {
                 "description": "get request to perform checkin",
                 "produces": [
@@ -22,6 +22,13 @@
                 "summary": "Perform Checkin to timewatch.co.il",
                 "operationId": "checkin",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company ID",
+                        "name": "company_id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Employee ID",
@@ -39,7 +46,7 @@
                 ]
             }
         },
-        "/v1/watcher/checkout/{employee_id}/{password}": {
+        "/v1/watcher/checkout/{company_id}/{employee_id}/{password}": {
             "get": {
                 "description": "get request to perform checkout",
                 "produces": [
@@ -51,6 +58,13 @@
                 "summary": "Perform Checkout to timewatch.co.il",
                 "operationId": "checkout",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company ID",
+                        "name": "company_id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Employee ID",
