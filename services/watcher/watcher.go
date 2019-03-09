@@ -21,6 +21,9 @@ type Option func(option *Options)
 var random = rand.New(rand.NewSource(time.Now().UnixNano()))
 var ixeeRegex, _ = regexp.Compile("ixee: (.*)}")
 
+const loginUrl = "http://checkin.timewatch.co.il/punch/punch2.php"
+const checkinCheckoutUrl = "http://checkin.timewatch.co.il/punch/punch3.php"
+
 func WithCompany(company string) Option {
 	return func(options *Options) {
 		if company != "" {
@@ -54,7 +57,7 @@ func doLogin(user string, password string, company string) (*resty.Client, strin
 		"pw":   password,
 		"B1.x": strconv.Itoa(random.Intn(30-1) + 1),
 		"B1.y": strconv.Itoa(random.Intn(30-1) + 1),
-	}).Post("http://checkin.timewatch.co.il/punch/punch2.php")
+	}).Post(loginUrl)
 	if err != nil {
 		return nil, "", err
 	}
@@ -103,7 +106,7 @@ func CheckIn(user string, password string, watcherOptions ...Option) (map[string
 		"prevtaskdescr": "",
 		"withtasks":     "0",
 		"tflag":         "",
-	}).Post("http://checkin.timewatch.co.il/punch/punch3.php")
+	}).Post(checkinCheckoutUrl)
 
 	return gin.H{"user": user, "password": password, "options": options}, nil
 }
@@ -139,7 +142,7 @@ func CheckOut(user string, password string, watcherOptions ...Option) (map[strin
 		"prevtaskdescr": "",
 		"withtasks":     "0",
 		"tflag":         "1",
-	}).Post("http://checkin.timewatch.co.il/punch/punch3.php")
+	}).Post(checkinCheckoutUrl)
 
 	return gin.H{"user": user, "password": password, "options": options}, nil
 }
