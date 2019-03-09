@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"net/http"
 	"watchmen/controllers"
 )
 
@@ -14,6 +15,9 @@ func NewRouter() *gin.Engine {
 
 	health := new(controllers.HealthController)
 	router.GET("/health", health.Status)
+	router.GET("/", func(context *gin.Context) {
+		context.Redirect(http.StatusPermanentRedirect, "/swagger/index.html")
+	})
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	v1 := router.Group("v1")
 	{
