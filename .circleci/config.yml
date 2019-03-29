@@ -1,12 +1,9 @@
-# Golang CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
 orbs:
   gcp-gcr: circleci/gcp-gcr@1.0.0
 workflows:
-  main:
+  build_and_push_image:
     jobs:
       - gcp-gcr/build_and_push_image_using_remote_docker:
           image: watchmen
-
+          tag: latest
