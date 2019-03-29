@@ -8,7 +8,7 @@ workflows:
   main:
     jobs:
       - gcp-gke/publish-and-rollout-image:
-          deployment: watchmen
+          deployment: standard-cluster-1
           image: watchmen
           container: watchmen
 
