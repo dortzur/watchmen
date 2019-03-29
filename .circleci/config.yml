@@ -7,7 +7,6 @@ orbs:
 workflows:
   main:
     jobs:
-      - build
       - gke/publish-and-rollout-image:
           context: watchmen
           deployment: watchmen
