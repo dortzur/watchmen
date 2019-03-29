@@ -3,12 +3,10 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
 orbs:
-  gcp-gke: circleci/gcp-gke@0.1.0
+  gcp-gcr: circleci/gcp-gcr@1.0.0
 workflows:
   main:
     jobs:
-      - gcp-gke/publish-and-rollout-image:
-          deployment: standard-cluster-1
+      - gcp-gcr/build_and_push_image_using_remote_docker:
           image: watchmen
-          container: watchmen
 
