@@ -17,10 +17,9 @@ jobs:
     #### expecting it in the form of
     ####   /go/src/github.com/circleci/go-tool
     ####   /go/src/bitbucket.org/circleci/go-tool
-    working_directory: /go/src/github.com/dortzur/watchmen
+    working_directory: /go/src/watchmen
     steps:
       - checkout
-      - run: export GOPATH=/go/src/github.com/dortzur/watchmen
       # specify any bash command here prefixed with `run: `
       - run: go build
       - run: go get -v -t -d ./...
