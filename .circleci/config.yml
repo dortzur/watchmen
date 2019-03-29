@@ -8,7 +8,6 @@ workflows:
   main:
     jobs:
       - gcp-gke/publish-and-rollout-image:
-          context: watchmen
           deployment: watchmen
           image: watchmen
           container: watchmen
