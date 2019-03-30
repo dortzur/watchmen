@@ -8,7 +8,7 @@ workflows:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: latest
-      - deploy:
+        deploy:
           docker:
             - image: google/cloud-sdk
               steps:
