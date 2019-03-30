@@ -8,7 +8,6 @@ workflows:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: latest
-          executor: gcp-gcr/default
 jobs:
   baba:
     executor: gcp-gcr/default
