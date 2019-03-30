@@ -3,6 +3,8 @@ orbs:
   gcp-gcr: circleci/gcp-gcr@0.0.4
 jobs:
   build:
+    executor:
+      - gcp-gcr/default
     steps:
 #      - checkout # check out the code in the project directory
       - run: echo BABA
@@ -14,7 +16,5 @@ workflows:
           image: watchmen
           tag: latest
       - build:
-          executor:
-            - gcp-gcr/default
           requires:
             - gcp-gcr/build_and_push_image
