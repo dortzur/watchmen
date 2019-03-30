@@ -57,5 +57,5 @@ func (h WatchController) CheckOut(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"success": true, "operation": "checkout", "company": company, "user": user})
+	c.JSON(http.StatusOK, gin.H{"success": true, "operation": "checkout", "company": userData.Company, "user": userData.User})
 }
