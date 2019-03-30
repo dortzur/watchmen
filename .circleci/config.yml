@@ -12,7 +12,7 @@ jobs:
       - run: $SUDO gcloud --quiet config set project $GOOGLE_PROJECT_ID
       - run: $SUDO gcloud --quiet config set compute/zone $GOOGLE_COMPUTE_ZONE
       - run: gcloud container clusters get-credentials standard-cluster-1 --zone us-central1-a --project the-full-stack
-      - run: curl -LO https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl && sudo chmod +x ./kubectl || chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin || mv ./kubectl /usr/local/bin
+      - run: curl -LO https://storage.googleapis.com/kubernetes-release/release/latest/bin/linux/amd64/kubectl && sudo chmod +x ./kubectl || chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin || mv ./kubectl /usr/local/bin
       - run: kubectl set image deployment.extensions/watchmen watchmen=gcr.io/the-full-stack/watchmen:latest --record=true
 
 workflows:
