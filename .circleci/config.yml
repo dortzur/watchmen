@@ -7,7 +7,6 @@ workflows:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: latest
-      - myjob:
-        - steps:
-          - run: gcloud container clusters get-credentials standard-cluster-1
-          - run: echo BABA
+          steps:
+            - run: gcloud container clusters get-credentials standard-cluster-1
+            - run: echo BABA
