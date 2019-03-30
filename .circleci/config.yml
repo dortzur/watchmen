@@ -5,8 +5,8 @@ jobs:
   deploy:
     docker:
       - image: google/cloud-sdk
-        steps:
-          - echo BABA
+    steps:
+      - echo BABA
 workflows:
   main:
     jobs:
