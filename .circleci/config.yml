@@ -6,6 +6,11 @@ jobs:
     executor: gcp-gcr/default
     steps:
 #      - checkout # check out the code in the project directory
+      - run: if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+      - run: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+      - run: $SUDO gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+      - run: $SUDO gcloud --quiet config set project $GOOGLE_PROJECT_ID
+      - run: $SUDO gcloud --quiet config set compute/zone $GOOGLE_COMPUTE_ZONE
       - run: gcloud container clusters get-credentials standard-cluster-1 --zone us-central1-a --project the-full-stack
 
 workflows:
