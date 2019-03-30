@@ -7,9 +7,9 @@ workflows:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: latest
-      - baba:
-          docker:
-            - image: circleci/go:1.12
-          steps:
-            - run: gcloud container clusters get-credentials standard-cluster-1
-            - run: echo BABA
+      baba:
+        docker:
+          - image: circleci/go:1.12
+        steps:
+          - run: gcloud container clusters get-credentials standard-cluster-1
+          - run: echo BABA
