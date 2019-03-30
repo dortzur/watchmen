@@ -21,6 +21,6 @@ workflows:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: latest
-      - build
+      - build:
           requires:
             - gcp-gcr/build_and_push_image
