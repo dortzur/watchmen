@@ -5,8 +5,6 @@ jobs:
   deploy:
     docker:
       - image: google/cloud-sdk
-    steps:
-      - echo BABA
 workflows:
   main:
     jobs:
@@ -14,3 +12,5 @@ workflows:
           image: watchmen
           tag: latest
       - deploy:
+          steps:
+            - echo BABA
