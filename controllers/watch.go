@@ -45,10 +45,14 @@ func (h WatchController) CheckIn(c *gin.Context) {
 // @Param user_data body model.UserData true "User Data"
 // @Router /v1/watcher/checkout [post]
 func (h WatchController) CheckOut(c *gin.Context) {
-	company := c.Param("company")
-	user := c.Param("username")
-	pass := c.Param("password")
-	_, err := watcher.CheckOut(user, pass, watcher.WithCompany(company))
+	var userData model.UserData
+
+	err := c.BindJSON(&userData)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	_, err = watcher.CheckOut(userData.User, userData.Password, watcher.WithCompany(userData.Company))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
