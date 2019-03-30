@@ -8,8 +8,8 @@ workflows:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: latest
-jobs:
-  baba:
-    executor: gcp-gcr/default
-    steps:
-      - echo BABA
+      - deploy:
+        docker:
+          - image: google/cloud-sdk
+            steps:
+              - echo BABA
