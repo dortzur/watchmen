@@ -1,15 +1,17 @@
 version: 2.1
 orbs:
   gcp-gcr: circleci/gcp-gcr@0.0.4
+jobs:
+  deploy:
+    docker:
+      - image: circleci/go:1.12
+    steps:
+      - run: gcloud container clusters get-credentials standard-cluster-1
+      - run: echo BABA
 workflows:
   main:
     jobs:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: latest
-      baba:
-        docker:
-          - image: circleci/go:1.12
-        steps:
-          - run: gcloud container clusters get-credentials standard-cluster-1
-          - run: echo BABA
+      - deploy:
