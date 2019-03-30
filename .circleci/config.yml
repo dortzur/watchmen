@@ -9,7 +9,7 @@ workflows:
           image: watchmen
           tag: latest
       - deploy:
-        docker:
-          - image: google/cloud-sdk
-            steps:
-              - echo BABA
+          docker:
+            - image: google/cloud-sdk
+              steps:
+                - echo BABA
