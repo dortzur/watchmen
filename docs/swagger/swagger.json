@@ -10,9 +10,12 @@
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/watcher/checkin/{company_id}/{employee_id}/{password}": {
-            "get": {
+        "/v1/watcher/checkin": {
+            "post": {
                 "description": "get request to perform checkin",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -23,32 +26,24 @@
                 "operationId": "checkin",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Company ID",
-                        "name": "company_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Employee ID",
-                        "name": "employee_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Employee Password",
-                        "name": "password",
-                        "in": "path",
-                        "required": true
+                        "description": "User Data",
+                        "name": "user_data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.UserData"
+                        }
                     }
                 ]
             }
         },
-        "/v1/watcher/checkout/{company_id}/{employee_id}/{password}": {
-            "get": {
+        "/v1/watcher/checkout": {
+            "post": {
                 "description": "get request to perform checkout",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -59,27 +54,40 @@
                 "operationId": "checkout",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Company ID",
-                        "name": "company_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Employee ID",
-                        "name": "employee_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Employee Password",
-                        "name": "password",
-                        "in": "path",
-                        "required": true
+                        "description": "User Data",
+                        "name": "user_data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.UserData"
+                        }
                     }
                 ]
+            }
+        }
+    },
+    "definitions": {
+        "model.UserData": {
+            "type": "object",
+            "required": [
+                "company",
+                "password",
+                "user"
+            ],
+            "properties": {
+                "company": {
+                    "type": "string",
+                    "example": "5687"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "Baba"
+                },
+                "user": {
+                    "type": "string",
+                    "example": "1234"
+                }
             }
         }
     }

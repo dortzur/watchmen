@@ -24,8 +24,8 @@ func NewRouter() *gin.Engine {
 		watcherGroup := v1.Group("watcher")
 		{
 			watcher := new(controllers.WatchController)
-			watcherGroup.GET("checkin/:company/:username/:password", watcher.CheckIn)
-			watcherGroup.GET("checkout/:company/:username/:password", watcher.CheckOut)
+			watcherGroup.POST("checkin", watcher.CheckIn)
+			watcherGroup.POST("checkout", watcher.CheckOut)
 		}
 	}
 	return router

@@ -1,4 +1,21 @@
 basePath: '{{.BasePath}}'
+definitions:
+  model.UserData:
+    properties:
+      company:
+        example: "5687"
+        type: string
+      password:
+        example: Baba
+        type: string
+      user:
+        example: "1234"
+        type: string
+    required:
+    - company
+    - password
+    - user
+    type: object
 host: '{{.Host}}'
 info:
   contact: {}
@@ -7,51 +24,39 @@ info:
   title: '{{.Title}}'
   version: "1.0"
 paths:
-  /v1/watcher/checkin/{company_id}/{employee_id}/{password}:
-    get:
+  /v1/watcher/checkin:
+    post:
+      consumes:
+      - application/json
       description: get request to perform checkin
       operationId: checkin
       parameters:
-      - description: Company ID
-        in: path
-        name: company_id
+      - description: User Data
+        in: body
+        name: user_data
         required: true
-        type: string
-      - description: Employee ID
-        in: path
-        name: employee_id
-        required: true
-        type: string
-      - description: Employee Password
-        in: path
-        name: password
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/model.UserData'
+          type: object
       produces:
       - application/json
       summary: Perform checkin via timewatch.co.il
       tags:
       - Watcher
-  /v1/watcher/checkout/{company_id}/{employee_id}/{password}:
-    get:
+  /v1/watcher/checkout:
+    post:
+      consumes:
+      - application/json
       description: get request to perform checkout
       operationId: checkout
       parameters:
-      - description: Company ID
-        in: path
-        name: company_id
+      - description: User Data
+        in: body
+        name: user_data
         required: true
-        type: string
-      - description: Employee ID
-        in: path
-        name: employee_id
-        required: true
-        type: string
-      - description: Employee Password
-        in: path
-        name: password
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/model.UserData'
+          type: object
       produces:
       - application/json
       summary: Perform checkout via timewatch.co.il

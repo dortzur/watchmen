@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"watchmen/model"
 	"watchmen/services/watcher"
 )
 
@@ -13,35 +14,36 @@ type WatchController struct{}
 // @Description get request to perform checkin
 // @ID checkin
 // @Produce json
+// @Accept  json
 // @Tags Watcher
-// @Param company_id path string true "Company ID"
-// @Param employee_id path string true "Employee ID"
-// @Param password path string true "Employee Password"
-// @Router /v1/watcher/checkin/{company_id}/{employee_id}/{password} [get]
+// @Param user_data body model.UserData true "User Data"
+// @Router /v1/watcher/checkin [post]
 func (h WatchController) CheckIn(c *gin.Context) {
-	company := c.Param("company")
-	user := c.Param("username")
-	pass := c.Param("password")
+	var userData model.UserData
 
-	_, err := watcher.CheckIn(user, pass, watcher.WithCompany(company))
+	err := c.BindJSON(&userData)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"success": true, "operation": "checkin", "company": company, "user": user})
+
+	_, err = watcher.CheckIn(userData.User, userData.Password, watcher.WithCompany(userData.Company))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"success": true, "operation": "checkin", "company": userData.Company, "user": userData.User})
 }
 
 // WatchController godoc
 // @Summary Perform checkout via timewatch.co.il
-// @GroupName baba
 // @Description get request to perform checkout
 // @ID checkout
 // @Tags Watcher
 // @Produce json
-// @Param company_id path string true "Company ID"
-// @Param employee_id path string true "Employee ID"
-// @Param password path string true "Employee Password"
-// @Router /v1/watcher/checkout/{company_id}/{employee_id}/{password} [get]
+// @Accept json
+// @Param user_data body model.UserData true "User Data"
+// @Router /v1/watcher/checkout [post]
 func (h WatchController) CheckOut(c *gin.Context) {
 	company := c.Param("company")
 	user := c.Param("username")
