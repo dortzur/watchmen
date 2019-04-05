@@ -21,8 +21,8 @@ type Option func(option *Options)
 var random = rand.New(rand.NewSource(time.Now().UnixNano()))
 var ixeeRegex, _ = regexp.Compile("ixee: (.*)}")
 
-const loginUrl = "http://checkin.timewatch.co.il/punch/punch2.php"
-const checkinCheckoutUrl = "http://checkin.timewatch.co.il/punch/punch3.php"
+const loginUrl = "https://checkin.timewatch.co.il/punch/punch2.php"
+const checkinCheckoutUrl = "https://checkin.timewatch.co.il/punch/punch3.php"
 
 func WithCompany(company string) Option {
 	return func(options *Options) {
