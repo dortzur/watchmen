@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
@@ -16,11 +17,15 @@ func getDelay(c *gin.Context) time.Duration {
 	if !hasDelay {
 		return 0
 	}
-	num, err := strconv.ParseInt(maxDelay, 10, 32)
-	if err != nil {
+	numMaxDelay, err := strconv.ParseInt(maxDelay, 10, 32)
+	if err != nil || numMaxDelay <= 0 {
 		return 0
 	}
-	return time.Duration(num)
+	delay := rand.Intn(int(numMaxDelay))
+	if delay == 0 {
+		delay = 1
+	}
+	return time.Duration(delay)
 }
 
 type WatchController struct{}
