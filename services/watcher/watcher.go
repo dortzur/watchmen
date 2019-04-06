@@ -86,27 +86,8 @@ func CheckIn(user string, password string, watcherOptions ...Option) (map[string
 		return nil, err
 	}
 
-	layout := "2006-01-02 15:04:05"
-	now := time.Now().Format(layout)
-	_, err = client.R().SetFormData(map[string]string{
-		"comp":          options.Company,
-		"name":          user,
-		"ts":            now,
-		"ix":            ixee,
-		"B1":            "כניסה",
-		"allowremarks":  "1",
-		"msgfound":      "0",
-		"thetask":       "0",
-		"teamleader":    "0",
-		"speccomp":      "",
-		"remark":        "",
-		"tasks":         "",
-		"taskdescr":     "",
-		"prevtask":      "0",
-		"prevtaskdescr": "",
-		"withtasks":     "0",
-		"tflag":         "",
-	}).Post(checkinCheckoutUrl)
+	params := GetCheckinParams(user, options.Company, ixee)
+	_, err = client.R().SetFormData(params).Post(checkinCheckoutUrl)
 
 	return gin.H{"user": user, "password": password, "options": options}, nil
 }
@@ -122,27 +103,8 @@ func CheckOut(user string, password string, watcherOptions ...Option) (map[strin
 		return nil, err
 	}
 
-	layout := "2006-01-02 15:04:05"
-	now := time.Now().Format(layout)
-	_, err = client.R().SetFormData(map[string]string{
-		"comp":          options.Company,
-		"name":          user,
-		"ts":            now,
-		"ix":            ixee,
-		"B1":            "יציאה",
-		"allowremarks":  "1",
-		"msgfound":      "0",
-		"thetask":       "0",
-		"teamleader":    "0",
-		"speccomp":      "",
-		"remark":        "",
-		"tasks":         "",
-		"taskdescr":     "",
-		"prevtask":      "0",
-		"prevtaskdescr": "",
-		"withtasks":     "0",
-		"tflag":         "1",
-	}).Post(checkinCheckoutUrl)
+	params := GetCheckoutParams(user, options.Company, ixee)
+	_, err = client.R().SetFormData(params).Post(checkinCheckoutUrl)
 
 	return gin.H{"user": user, "password": password, "options": options}, nil
 }
