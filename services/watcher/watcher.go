@@ -8,11 +8,20 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+	"watchmen/model"
+	"watchmen/services/watcher/watcherParams"
 )
 
 type Options struct {
 	Company string `json:"company"`
 }
+
+type Operation string
+
+const (
+	CHECKIN  = "CHECKIN"
+	CHECKOUT = "CHECKOUT"
+)
 
 var defaultOptions = Options{Company: "4266"}
 
@@ -76,20 +85,28 @@ func doLogin(user string, password string, company string) (*resty.Client, strin
 	return client, ixee, nil
 }
 
+func doOperation(userData model.UserData, operation Operation) (map[string]interface{}, error) {
+	client, ixee, err := doLogin(userData.User, userData.Password, userData.Company)
+	if err != nil {
+		return nil, err
+	}
+	var params map[string]string = nil
+	if operation == CHECKIN {
+		params = watcherParams.GetCheckinParams(userData.User, userData.Company, ixee)
+	} else {
+		params = watcherParams.GetCheckoutParams(userData.User, userData.Company, ixee)
+	}
+	_, err = client.R().SetFormData(params).Post(checkinCheckoutUrl)
+	return gin.H{"userData": userData, "operation": operation}, nil
+}
+
 func CheckIn(user string, password string, watcherOptions ...Option) (map[string]interface{}, error) {
 	options := defaultOptions
 	for _, opt := range watcherOptions {
 		opt(&options)
 	}
-	client, ixee, err := doLogin(user, password, options.Company)
-	if err != nil {
-		return nil, err
-	}
-
-	params := GetCheckinParams(user, options.Company, ixee)
-	_, err = client.R().SetFormData(params).Post(checkinCheckoutUrl)
-
-	return gin.H{"user": user, "password": password, "options": options}, nil
+	userData := model.UserData{User: user, Password: password, Company: options.Company}
+	return doOperation(userData, CHECKIN)
 }
 
 func CheckOut(user string, password string, watcherOptions ...Option) (map[string]interface{}, error) {
@@ -98,13 +115,6 @@ func CheckOut(user string, password string, watcherOptions ...Option) (map[strin
 		opt(&options)
 	}
 
-	client, ixee, err := doLogin(user, password, options.Company)
-	if err != nil {
-		return nil, err
-	}
-
-	params := GetCheckoutParams(user, options.Company, ixee)
-	_, err = client.R().SetFormData(params).Post(checkinCheckoutUrl)
-
-	return gin.H{"user": user, "password": password, "options": options}, nil
+	userData := model.UserData{User: user, Password: password, Company: options.Company}
+	return doOperation(userData, CHECKOUT)
 }
