@@ -34,6 +34,12 @@
                             "type": "object",
                             "$ref": "#/definitions/model.UserData"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Max delay in minutes until request is sent (random)",
+                        "name": "max_delay",
+                        "in": "query"
                     }
                 ]
             }
@@ -62,6 +68,12 @@
                             "type": "object",
                             "$ref": "#/definitions/model.UserData"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Max delay in minutes until request is sent (random)",
+                        "name": "max_delay",
+                        "in": "query"
                     }
                 ]
             }

@@ -9,19 +9,13 @@ import (
 	"strconv"
 	"time"
 	"watchmen/model"
+	"watchmen/services/watcher/watcherOperation"
 	"watchmen/services/watcher/watcherParams"
 )
 
 type Options struct {
 	Company string `json:"company"`
 }
-
-type Operation string
-
-const (
-	CHECKIN  = "CHECKIN"
-	CHECKOUT = "CHECKOUT"
-)
 
 var defaultOptions = Options{Company: "4266"}
 
@@ -85,13 +79,13 @@ func doLogin(user string, password string, company string) (*resty.Client, strin
 	return client, ixee, nil
 }
 
-func doOperation(userData model.UserData, operation Operation) (map[string]interface{}, error) {
+func doOperation(userData model.UserData, operation watcherOperation.Operation) (map[string]interface{}, error) {
 	client, ixee, err := doLogin(userData.User, userData.Password, userData.Company)
 	if err != nil {
 		return nil, err
 	}
 	var params map[string]string = nil
-	if operation == CHECKIN {
+	if operation == watcherOperation.CheckIn {
 		params = watcherParams.GetCheckinParams(userData.User, userData.Company, ixee)
 	} else {
 		params = watcherParams.GetCheckoutParams(userData.User, userData.Company, ixee)
@@ -106,7 +100,7 @@ func CheckIn(user string, password string, watcherOptions ...Option) (map[string
 		opt(&options)
 	}
 	userData := model.UserData{User: user, Password: password, Company: options.Company}
-	return doOperation(userData, CHECKIN)
+	return doOperation(userData, watcherOperation.CheckIn)
 }
 
 func CheckOut(user string, password string, watcherOptions ...Option) (map[string]interface{}, error) {
@@ -116,5 +110,5 @@ func CheckOut(user string, password string, watcherOptions ...Option) (map[strin
 	}
 
 	userData := model.UserData{User: user, Password: password, Company: options.Company}
-	return doOperation(userData, CHECKOUT)
+	return doOperation(userData, watcherOperation.CheckOut)
 }
