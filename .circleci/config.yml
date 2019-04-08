@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 orbs:
   gcp-gcr: circleci/gcp-gcr@0.0.4
 jobs:
