@@ -2,18 +2,26 @@ version: 2.1
 orbs:
   gcp-gcr: circleci/gcp-gcr@0.0.4
 jobs:
-  build:
+  deploy:
     executor: gcp-gcr/default
     steps:
-#      - checkout # check out the code in the project directory
-      - run: if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
-      - run: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-      - run: $SUDO gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-      - run: $SUDO gcloud --quiet config set project $GOOGLE_PROJECT_ID
-      - run: $SUDO gcloud --quiet config set compute/zone $GOOGLE_COMPUTE_ZONE
-      - run: gcloud container clusters get-credentials standard-cluster-1 --zone us-central1-a --project the-full-stack
-      - run: curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo chmod +x ./kubectl || chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin || mv ./kubectl /usr/local/bin
-      - run: kubectl set image deployment.extensions/watchmen watchmen=gcr.io/the-full-stack/watchmen:$CIRCLE_SHA1 --record=true
+      - run:
+          name: setup  gcloud
+          command: |
+            if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+            $SUDO gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            $SUDO gcloud --quiet config set project $GOOGLE_PROJECT_ID
+            $SUDO gcloud --quiet config set compute/zone $GOOGLE_COMPUTE_ZONE
+            gcloud container clusters get-credentials standard-cluster-1 --zone us-central1-a --project the-full-stack
+      - run:
+          name: setup kube-ctl
+          command: |
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo chmod +x ./kubectl || chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin || mv ./kubectl /usr/local/bin
+      - run:
+          name: update watchmen
+          command: |
+            kubectl set image deployment.extensions/watchmen watchmen=gcr.io/the-full-stack/watchmen:$CIRCLE_SHA1 --record=true
 
 workflows:
   main:
@@ -21,6 +29,6 @@ workflows:
       - gcp-gcr/build_and_push_image:
           image: watchmen
           tag: $CIRCLE_SHA1
-      - build:
+      - deploy:
           requires:
             - gcp-gcr/build_and_push_image
